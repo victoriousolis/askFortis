@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Driver Check-In Poster · Project Comstock</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<style>
+:root{--teal:#0C3C43;--olive:#5A5D24;--red:#C0121D;--ink:#1b2426;--ink-2:#4a5759;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;background:#e9eceb}
+body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink)}
+.bar{max-width:8.5in;margin:16px auto 0;display:flex;gap:8px;flex-wrap:wrap;padding:0 12px}
+.bar button{border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;background:var(--teal);color:#fff;cursor:pointer}
+.bar button.alt{background:#fff;color:var(--teal);border:1.5px solid #c9d2d3}
+.bar p{flex-basis:100%;margin:4px 0 0;color:var(--ink-2);font-size:14px}
+.page{width:8.5in;max-width:calc(100% - 24px);min-height:11in;margin:12px auto 24px;background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;text-align:center;padding:.45in .5in;border-top:18px solid var(--red)}
+.logo{height:46px;width:auto;margin-bottom:10px}
+.kick{font-weight:900;letter-spacing:.14em;color:var(--olive);font-size:20px;margin:6px 0 0}
+h1{margin:4px 0 0;font-size:62px;line-height:1;color:var(--teal);letter-spacing:-.01em}
+h1 .t{display:block;font-size:84px}
+.es{font-size:26px;font-weight:800;color:var(--ink-2);margin:10px 0 0}
+.qr{margin:22px 0 10px;padding:16px;border:6px solid var(--teal);border-radius:24px;background:#fff;line-height:0}
+.qr svg{width:3.9in;height:3.9in;max-width:70vw;max-height:70vw;display:block}
+.url{font-size:15px;color:var(--ink-2);word-break:break-all;margin:4px 0 16px;max-width:6.8in}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%;max-width:7.2in;margin-top:4px}
+.steps div{background:#f3f5f4;border-radius:16px;padding:14px 10px}
+.steps b{display:block;font-size:30px;color:var(--olive);line-height:1}
+.steps span{display:block;font-weight:800;font-size:18px;margin-top:6px}
+.steps small{display:block;color:var(--ink-2);font-size:14px;margin-top:3px}
+.foot{margin-top:auto;padding-top:18px;font-size:13px;color:var(--ink-2)}
+@media print{
+  html,body{background:#fff}
+  .bar{display:none}
+  .page{box-shadow:none;margin:0;max-width:none;width:auto;min-height:0;height:100vh;padding:.35in .45in}
+  @page{size:letter;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="bar"><button type="button" onclick="window.print()">🖨️ Print poster</button><button type="button" class="alt" id="dl">⬇ Download QR image</button><button type="button" class="alt" onclick="location.href='delivery.html'">Open the driver page</button>
+  <p>Print on letter paper (or larger) and post it at the gate, the parking lot, and each STY laydown. The QR opens the driver check-in page.</p></div>
+<div class="page">
+  <img class="logo" src="icons/fortis-logo.png" alt="Fortis Construction">
+  <div class="kick">PROJECT COMSTOCK</div>
+  <h1><span class="t">🚛 DRIVERS</span>Check in your delivery</h1>
+  <div class="es">Conductores: registre su entrega aquí</div>
+  <div class="qr" id="qr"></div>
+  <div class="url" id="url"></div>
+  <div class="steps">
+    <div><b>1</b><span>Scan</span><small>Point your phone camera at the code · Escanee</small></div>
+    <div><b>2</b><span>Fill it in</span><small>Your name, the company, the load · Llene el formulario</small></div>
+    <div><b>3</b><span>Wait at your truck</span><small>Their team gets an alert · Espere en su camión</small></div>
+  </div>
+  <div class="foot">No smartphone? Call the company you're delivering to, or the site gate.</div>
+</div>
+<script src="qrcode.js"></script>
+<script>
+(() => {
+  const url = new URL('delivery.html', location.href.split('#')[0].split('?')[0]).href;
+  document.getElementById('url').textContent = url;
+  const q = qrcode(0, 'M'); q.addData(url); q.make();
+  const svg = q.createSvgTag({cellSize: 8, margin: 2, scalable: true});
+  document.getElementById('qr').innerHTML = svg;
+  document.getElementById('dl').onclick = () => {
+    // PNG at print quality for signs, stickers, or emails
+    const n = q.getModuleCount(), cell = 24, m = 4, size = (n + m * 2) * cell, c = document.createElement('canvas');
+    c.width = c.height = size; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, size, size); x.fillStyle = '#000';
+    for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) x.fillRect((k + m) * cell, (r + m) * cell, cell, cell);
+    const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = 'comstock-driver-check-in-qr.png'; document.body.appendChild(a); a.click(); a.remove();
+  };
+})();
+</script>
+</body>
+</html>

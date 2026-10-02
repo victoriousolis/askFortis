@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delivery Check-In · Project Comstock</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0C3C43">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<style>
+:root{--teal:#0C3C43;--teal-2:#135663;--teal-3:#e6eff0;--olive:#5A5D24;--red:#C0121D;--bg:#f3f5f4;--ink:#1b2426;--ink-2:#4a5759;--line:#dfe5e5;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+header{background:#fff;border-bottom:4px solid var(--red);padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;display:flex;align-items:center;gap:12px}
+header img{height:30px;width:auto}
+header .t{font-weight:800;color:var(--teal);font-size:15px;line-height:1.15}
+header .t small{display:block;font-weight:600;color:var(--ink-2);font-size:12.5px}
+main{max-width:560px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+.hero{background:var(--teal);color:#fff;border-radius:18px;padding:18px 18px 16px;margin-bottom:14px}
+.hero h1{margin:0 0 4px;font-size:26px;line-height:1.1}
+.hero p{margin:0;opacity:.92;font-size:15.5px}
+.hero .truck{font-size:40px;float:right;margin:-4px 0 0 8px}
+.lang{display:flex;gap:6px;justify-content:flex-end;margin:-4px 0 10px}
+.lang button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:14px;font-weight:700;color:var(--ink-2)}
+.lang button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(12,60,67,.08),0 4px 14px rgba(12,60,67,.06)}
+label{display:block;font-weight:700;font-size:15px;margin:0 0 12px}
+label small{font-weight:500;color:var(--ink-2)}
+input,textarea{display:block;width:100%;margin-top:6px;border:1.5px solid #c9d2d3;border-radius:12px;padding:13px 14px;font:inherit;font-size:17px;color:var(--ink);background:#fff}
+input:focus,textarea:focus{outline:3px solid rgba(19,86,99,.25);border-color:var(--teal-2)}
+textarea{min-height:70px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chips button{border:1.5px solid #c9d2d3;background:#fff;border-radius:999px;padding:10px 14px;font:inherit;font-size:15.5px;font-weight:700;color:var(--teal)}
+.chips button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.req{color:var(--red)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.go{display:block;width:100%;border:0;border-radius:16px;background:var(--olive);color:#fff;font:inherit;font-size:20px;font-weight:800;padding:18px;margin-top:6px}
+.go:disabled{opacity:.6}
+.err{background:#fde8e8;color:#8a1016;border-radius:12px;padding:10px 12px;margin:8px 0;font-weight:600;display:none}
+.done{text-align:center}
+.done .big{font-size:56px;line-height:1}
+.done h2{margin:6px 0 4px;color:var(--teal);font-size:24px}
+.status{border-radius:14px;padding:14px;margin:12px 0;font-weight:700;font-size:17px;text-align:left}
+.status.wait{background:#fff6dc;color:#6b4b00}
+.status.ok{background:#e3f4e6;color:#1d5e2a}
+.status.no{background:#fde8e8;color:#8a1016}
+.status small{display:block;font-weight:500;font-size:14.5px;margin-top:3px}
+.pulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:#e0a000;margin-right:8px;animation:p 1.2s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.call{display:block;border-radius:14px;background:var(--teal);color:#fff;text-decoration:none;font-weight:800;padding:14px;margin-top:8px;text-align:center}
+.ghost{display:block;width:100%;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:13px;font:inherit;font-weight:700;color:var(--teal);margin-top:10px}
+.sum{text-align:left;font-size:15px;color:var(--ink-2);margin-top:10px}
+.sum b{color:var(--ink)}
+.note{color:var(--ink-2);font-size:14px}
+.off{background:#fff6dc;color:#6b4b00;border-radius:14px;padding:14px;font-weight:600}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+<header><img src="icons/fortis-logo.png" alt="Fortis Construction"><div class="t">Project Comstock<small data-t="hdr">Delivery check-in</small></div></header>
+<main>
+  <div class="lang"><button type="button" data-lang="en" class="on">English</button><button type="button" data-lang="es">Español</button></div>
+  <div class="hero"><span class="truck" aria-hidden="true">🚛</span><h1 data-t="h1">Delivery check-in</h1><p data-t="sub">Tell us who the load is for. We’ll alert their team right away so someone comes to meet you.</p></div>
+
+  <div id="offline" class="off" style="display:none" data-t="off">Delivery check-in isn’t connected yet. Please call the person you’re delivering to, or the site gate.</div>
+
+  <form id="f" novalidate>
+    <div class="card">
+      <label><span data-t="name">Your name</span> <span class="req">*</span><input id="name" autocomplete="name" required></label>
+      <label><span data-t="phone">Your cell phone</span> <span class="req">*</span><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="775-555-0100" required></label>
+      <label><span data-t="carrier">Trucking company</span> <small data-t="opt">(optional)</small><input id="carrier" autocomplete="organization"></label>
+    </div>
+    <div class="card">
+      <label><span data-t="co">Delivering to (company on site)</span> <span class="req">*</span><input id="company" list="cos" required placeholder="e.g. ACCO, Newtron, Bombard"><datalist id="cos"></datalist></label>
+      <label><span data-t="contact">Person you’re delivering to</span> <small data-t="opt">(optional)</small><input id="contact"></label>
+      <div style="font-weight:700;font-size:15px"><span data-t="sty">Which STY (building)?</span> <span class="req">*</span></div>
+      <div class="chips" id="stys"></div>
+      <label style="margin-top:14px"><span data-t="spot">Where are you parked?</span><div class="chips" id="spots"></div><input id="spot" data-tph="spotph" placeholder="Or type it: gate, lot, landmark"></label>
+    </div>
+    <div class="card">
+      <label><span data-t="load">What’s on the load?</span> <span class="req">*</span><input id="load" data-tph="loadph" placeholder="e.g. rebar, 2 bundles · conduit · pallets of block"></label>
+      <label><span data-t="po">PO or delivery ticket #</span> <small data-t="opt">(optional)</small><input id="po"></label>
+      <label><span data-t="truck">Truck / trailer # or description</span> <small data-t="opt">(optional)</small><input id="truck" data-tph="truckph" placeholder="e.g. white Peterbilt, flatbed"></label>
+      <label><span data-t="notes">Anything else?</span> <small data-t="opt">(optional)</small><textarea id="notes" data-tph="notesph" placeholder="e.g. need a forklift to unload"></textarea></label>
+      <div class="hp" aria-hidden="true"><label>Website<input id="website" tabindex="-1" autocomplete="off"></label></div>
+    </div>
+    <div class="err" id="err"></div>
+    <button class="go" type="submit" id="go" data-t="go">Check in &amp; alert them</button>
+    <p class="note" data-t="privacy">Your name and phone go only to the receiving company’s team and Fortis, so they can find you.</p>
+  </form>
+
+  <div id="after" style="display:none"></div>
+</main>
+<script>
+(() => {
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+const API = (window.ASK_FORTIS_API || '').replace(/\/$/, '');
+const store = {get: k => { try { return localStorage.getItem(k); } catch(e){ return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch(e){} }};
+const T = {
+  en: {hdr: 'Delivery check-in', h1: 'Delivery check-in', sub: 'Tell us who the load is for. We’ll alert their team right away so someone comes to meet you.', off: 'Delivery check-in isn’t connected yet. Please call the person you’re delivering to, or the site gate.',
+    name: 'Your name', phone: 'Your cell phone', carrier: 'Trucking company', opt: '(optional)', co: 'Delivering to (company on site)', contact: 'Person you’re delivering to', sty: 'Which STY (building)?', spot: 'Where are you parked?',
+    load: 'What’s on the load?', po: 'PO or delivery ticket #', truck: 'Truck / trailer # or description', notes: 'Anything else?', go: 'Check in & alert them', privacy: 'Your name and phone go only to the receiving company’s team and Fortis, so they can find you.',
+    spotph: 'Or type it: gate, lot, landmark', loadph: 'e.g. rebar, 2 bundles · conduit · pallets of block', truckph: 'e.g. white Peterbilt, flatbed', notesph: 'e.g. need a forklift to unload',
+    spots: ['Main gate / parking lot', 'At the STY laydown yard', 'On the road outside the gate'], notsure: 'Not sure',
+    need: 'Please fill in your name, a 10-digit cell number, the company, the STY, and what’s on the load.', sending: 'Alerting…', fail: 'Couldn’t send. Check your signal and try again, or call the site.',
+    sent: 'They’ve been alerted', sentsub: n => n ? n + (n === 1 ? ' person' : ' people') + ' at ' : 'The team at ', stay: 'Stay with your truck. This page updates when someone answers.',
+    waiting: 'Waiting for someone to answer…', coming: (n) => n + ' is on the way', other: (n) => n + ' says someone else is coming', notours: (n) => n + ' says this isn’t their delivery. Check the company name, or call the site.',
+    nobody: c => 'No one from ' + c + ' is on Ask Fortis yet.', fb: 'Fortis site security was texted to help you reach them.', callthem: 'Please call your contact at ' , again: 'Check in another delivery', callp: n => 'Call ' + n, edit: 'Fix something and send again'},
+  es: {hdr: 'Registro de entregas', h1: 'Registro de entrega', sub: 'Díganos para quién es la carga. Avisaremos a su equipo de inmediato para que alguien venga a recibirlo.', off: 'El registro de entregas aún no está conectado. Llame a la persona que recibe la entrega o a la puerta del sitio.',
+    name: 'Su nombre', phone: 'Su celular', carrier: 'Compañía de transporte', opt: '(opcional)', co: 'Entrega para (compañía en el sitio)', contact: 'Persona que recibe', sty: '¿Qué STY (edificio)?', spot: '¿Dónde está estacionado?',
+    load: '¿Qué trae la carga?', po: 'Número de PO o boleta', truck: 'Número o descripción del camión / tráiler', notes: '¿Algo más?', go: 'Registrar y avisar', privacy: 'Su nombre y teléfono solo se comparten con el equipo de la compañía que recibe y con Fortis.',
+    spotph: 'O escríbalo: puerta, lote, referencia', loadph: 'ej. varilla, 2 paquetes · tubería · tarimas de block', truckph: 'ej. Peterbilt blanco, plataforma', notesph: 'ej. necesito montacargas para descargar',
+    spots: ['Puerta principal / estacionamiento', 'En el patio de material del STY', 'En el camino afuera de la puerta'], notsure: 'No sé',
+    need: 'Escriba su nombre, un celular de 10 dígitos, la compañía, el STY y qué trae la carga.', sending: 'Avisando…', fail: 'No se pudo enviar. Revise su señal e intente de nuevo, o llame al sitio.',
+    sent: 'Ya les avisamos', sentsub: n => n ? n + (n === 1 ? ' persona' : ' personas') + ' de ' : 'El equipo de ', stay: 'Quédese con su camión. Esta página se actualiza cuando alguien responda.',
+    waiting: 'Esperando respuesta…', coming: (n) => n + ' va en camino', other: (n) => n + ' dice que otra persona viene', notours: (n) => n + ' dice que esta entrega no es de ellos. Revise el nombre de la compañía o llame al sitio.',
+    nobody: c => 'Nadie de ' + c + ' usa Ask Fortis todavía.', fb: 'Se avisó a seguridad de Fortis para ayudarle a comunicarse.', callthem: 'Por favor llame a su contacto en ', again: 'Registrar otra entrega', callp: n => 'Llamar a ' + n, edit: 'Corregir y enviar de nuevo'}
+};
+let L = store.get('af_dl_lang') === 'es' ? 'es' : 'en';
+const t = k => T[L][k];
+let STY = '', SPOT = '', LAST = null, POLL = null;
+function applyLang(){
+  document.documentElement.lang = L;
+  $$('[data-t]').forEach(el => { const v = t(el.dataset.t); if (typeof v === 'string') el.textContent = v; });
+  $$('[data-tph]').forEach(el => el.placeholder = t(el.dataset.tph));
+  $$('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === L));
+  drawSpots();
+  if (LAST) renderAfter();
+}
+function chipRow(el, items, cur, onPick){
+  el.innerHTML = items.map(x => '<button type="button" class="' + (x === cur ? 'on' : '') + '">' + esc(x) + '</button>').join('');
+  [...el.children].forEach((b, i) => b.onclick = () => onPick(items[i]));
+}
+let STYS = ['STY 2', 'STY 4', 'STY 10', 'STY 12'];
+function drawStys(){ chipRow($('#stys'), STYS.concat([t('notsure')]), STY, v => { STY = v; drawStys(); }); }
+function drawSpots(){ chipRow($('#spots'), t('spots'), SPOT, v => { SPOT = SPOT === v ? '' : v; drawSpots(); }); }
+async function call(path, body){
+  const r = await fetch(API + path, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body || {})});
+  return r.json();
+}
+// remember the driver for next time
+['name', 'phone', 'carrier'].forEach(k => { const v = store.get('af_dl_' + k); if (v) $('#' + k).value = v; });
+$$('[data-lang]').forEach(b => b.onclick = () => { L = b.dataset.lang; store.set('af_dl_lang', L); applyLang(); });
+applyLang(); drawStys();
+if (!API){ $('#offline').style.display = 'block'; }
+else call('/delivery/public/info').then(j => { if (j && j.ok){ if (j.stys && j.stys.length){ STYS = j.stys; drawStys(); } $('#cos').innerHTML = (j.companies || []).map(c => '<option value="' + esc(c) + '">').join(''); } }).catch(() => {});
+
+$('#f').onsubmit = async e => {
+  e.preventDefault();
+  const v = id => $('#' + id).value.trim();
+  const f = {name: v('name'), phone: v('phone'), carrier: v('carrier'), company: v('company'), contact: v('contact'), sty: STY === t('notsure') ? 'Not sure' : STY, spot: [SPOT, v('spot')].filter(Boolean).join(' – '), load: v('load'), po: v('po'), truck: v('truck'), notes: v('notes')};
+  const err = $('#err');
+  if (!f.name || f.phone.replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '').length !== 10 || !f.company || !f.sty || !f.load){ err.textContent = t('need'); err.style.display = 'block'; err.scrollIntoView({block: 'center'}); return; }
+  if (!API){ $('#offline').scrollIntoView({block: 'center'}); return; }
+  err.style.display = 'none';
+  ['name', 'phone', 'carrier'].forEach(k => store.set('af_dl_' + k, f[k]));
+  const go = $('#go'); go.disabled = true; go.textContent = t('sending');
+  try {
+    const base = location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '');
+    const j = await call('/delivery/public/checkin', {f, website: v('website'), app: base, horn: base + 'sounds/truck-horn.mp3'});
+    if (!j || !j.ok){ err.textContent = (j && j.error) || t('fail'); err.style.display = 'block'; go.disabled = false; go.textContent = t('go'); return; }
+    LAST = {id: j.id, token: j.token, f, notified: j.notified || {}, d: null};
+    $('#f').style.display = 'none'; $('#after').style.display = 'block'; renderAfter(); window.scrollTo(0, 0);
+    let n = 0; POLL = setInterval(async () => { if (++n > 360) return clearInterval(POLL); try { const s = await call('/delivery/public/status', {id: LAST.id, token: LAST.token}); if (s && s.ok){ LAST.d = s.delivery; renderAfter(); } } catch(e){} }, 8000);
+  } catch(e2){ err.textContent = t('fail'); err.style.display = 'block'; go.disabled = false; go.textContent = t('go'); }
+};
+function renderAfter(){
+  const f = LAST.f, nt = LAST.notified, d = LAST.d, acks = (d && d.acks) || [];
+  const coming = acks.filter(a => a.status === 'On my way'), other = acks.filter(a => a.status === 'Someone else is coming'), notours = acks.filter(a => a.status === 'Not ours');
+  let st;
+  if (coming.length) st = '<div class="status ok">✓ ' + esc(t('coming')(coming.map(a => a.name).join(', '))) + '</div>' + coming.filter(a => a.phone).map(a => '<a class="call" href="tel:' + esc(a.phone.replace(/[^\d+]/g, '')) + '">📞 ' + esc(t('callp')(a.name.split(' ')[0])) + '</a>').join('');
+  else if (other.length) st = '<div class="status ok">✓ ' + esc(t('other')(other[0].name)) + '</div>';
+  else if (notours.length) st = '<div class="status no">' + esc(t('notours')(notours[0].name)) + '</div>';
+  else if (!nt.people) st = '<div class="status no">' + esc(t('nobody')(f.company)) + '<small>' + esc(nt.fallback ? t('fb') : t('callthem') + f.company + '.') + '</small></div>';
+  else st = '<div class="status wait"><span class="pulse"></span>' + esc(t('waiting')) + '</div>';
+  $('#after').innerHTML = '<div class="card done"><div class="big">✅</div><h2>' + esc(t('sent')) + '</h2><p style="margin:0">' + esc(t('sentsub')(nt.people || 0)) + '<b>' + esc(f.company) + '</b></p>' + st +
+    '<p class="note">' + esc(t('stay')) + '</p>' +
+    '<div class="sum"><b>' + esc(f.sty) + (f.spot ? ' – ' + esc(f.spot) : '') + '</b><br>' + esc(f.load) + (f.po ? ' · ' + (/^po\b/i.test(f.po) ? '' : 'PO ') + esc(f.po) : '') + '<br>' + esc(f.name) + ' · ' + esc(f.phone) + '</div></div>' +
+    '<button class="ghost" type="button" id="again">' + esc(t('again')) + '</button>';
+  $('#again').onclick = () => { clearInterval(POLL); LAST = null; ['company', 'contact', 'load', 'po', 'truck', 'notes', 'spot'].forEach(k => $('#' + k).value = ''); STY = ''; SPOT = ''; drawStys(); drawSpots(); $('#after').style.display = 'none'; $('#f').style.display = 'block'; const g = $('#go'); g.disabled = false; g.textContent = t('go'); window.scrollTo(0, 0); };
+}
+})();
+</script>
+</body>
+</html>
